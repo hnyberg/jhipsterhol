@@ -1,0 +1,56 @@
+{
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "user",
+            "otherEntityName": "user",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "firstName"
+        },
+        {
+            "relationshipId": 2,
+            "relationshipName": "rating",
+            "otherEntityName": "rating",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "hipsterPoi"
+        },
+        {
+            "relationshipId": 3,
+            "relationshipName": "type",
+            "otherEntityName": "type",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "title",
+            "ownerSide": true
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "title",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "adress",
+            "fieldType": "String"
+        },
+        {
+            "fieldId": 3,
+            "fieldName": "latitude",
+            "fieldType": "Double"
+        },
+        {
+            "fieldId": 4,
+            "fieldName": "longitude",
+            "fieldType": "Double"
+        }
+        
+    ],
+    "changelogDate": "20160127144532",
+    "dto": "no",
+    "service": "no",
+    "pagination": "pager"
+}

@@ -5,5 +5,8 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
     <include file="classpath:config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160127141946_added_entity_Type.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160127144532_added_entity_HipsterPoi.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160127144904_added_entity_Rating.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
 </databaseChangeLog>
