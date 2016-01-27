@@ -1,0 +1,24 @@
+{
+  "generator-jhipster": {
+    "baseName": "jhipsterhol",
+    "packageName": "com.mycompany.demo.jhipsterhol",
+    "packageFolder": "com/mycompany/demo/jhipsterhol",
+    "authenticationType": "session",
+    "hibernateCache": "ehcache",
+    "clusteredHttpSession": "no",
+    "websocket": "no",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "prodDatabaseType": "postgresql",
+    "searchEngine": "no",
+    "useSass": false,
+    "buildTool": "maven",
+    "frontendBuilder": "grunt",
+    "enableTranslation": true,
+    "enableSocialSignIn": false,
+    "rememberMeKey": "c7e9ab04caf072ae3987bbfdb52f634b3128308d",
+    "testFrameworks": [
+      "gatling"
+    ]
+  }
+}
