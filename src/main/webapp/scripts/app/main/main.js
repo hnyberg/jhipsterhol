@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('jhipsterholApp')
-    .config(function ($stateProvider) {
+    .config(function ($stateProvider, uiGmapGoogleMapApiProvider) {
         $stateProvider
             .state('home', {
                 parent: 'site',
@@ -22,4 +22,9 @@ angular.module('jhipsterholApp')
                     }]
                 }
             });
+        uiGmapGoogleMapApiProvider.configure({
+            //    key: 'your api key',
+            v: '3.20', //defaults to latest 3.X anyhow
+            libraries: 'weather,geometry,visualization'
+        });
     });

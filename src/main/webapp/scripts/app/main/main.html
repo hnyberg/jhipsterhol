@@ -1,4 +1,17 @@
 <div ng-cloak>
+	<div class="row" ng-if="isAuthenticated()">
+        <span class="h1">Hipster Map</span>
+        <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="options">
+            <ui-gmap-marker ng-repeat="marker in markers" coords="{ latitude: marker.latitude, longitude: marker.longitude }" idkey="marker.id">
+                <ui-gmap-window ng-cloak>
+                    <p>
+                        {{marker.title}}<br/>
+                        {{marker.adress}}<br/>
+                    </p>
+                </ui-gmap-window>
+            </ui-gmap-marker>
+        </ui-gmap-google-map>
+    </div>  
     <div class="row">
         <div class="col-md-4">
             <span class="hipster img-responsive img-rounded"></span>
