@@ -1,10 +1,13 @@
 package com.mycompany.demo.jhipsterhol.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import com.mycompany.demo.jhipsterhol.domain.HipsterPoi;
-import com.mycompany.demo.jhipsterhol.repository.HipsterPoiRepository;
-import com.mycompany.demo.jhipsterhol.web.rest.util.HeaderUtil;
-import com.mycompany.demo.jhipsterhol.web.rest.util.PaginationUtil;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+
+import javax.inject.Inject;
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -13,14 +16,19 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.inject.Inject;
-import javax.validation.Valid;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Optional;
+import com.codahale.metrics.annotation.Timed;
+import com.mycompany.demo.jhipsterhol.domain.HipsterPoi;
+import com.mycompany.demo.jhipsterhol.repository.HipsterPoiRepository;
+import com.mycompany.demo.jhipsterhol.service.GeoCodingService;
+import com.mycompany.demo.jhipsterhol.service.GeoCodingService.GeoLocation;
+import com.mycompany.demo.jhipsterhol.web.rest.util.HeaderUtil;
+import com.mycompany.demo.jhipsterhol.web.rest.util.PaginationUtil;
 
 /**
  * REST controller for managing HipsterPoi.
@@ -34,18 +42,23 @@ public class HipsterPoiResource {
     @Inject
     private HipsterPoiRepository hipsterPoiRepository;
     
+    @Inject
+	private GeoCodingService geoCodingService;
+    
     /**
      * POST  /hipsterPois -> Create a new hipsterPoi.
+     * @throws Exception 
      */
     @RequestMapping(value = "/hipsterPois",
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<HipsterPoi> createHipsterPoi(@Valid @RequestBody HipsterPoi hipsterPoi) throws URISyntaxException {
+    public ResponseEntity<HipsterPoi> createHipsterPoi(@Valid @RequestBody HipsterPoi hipsterPoi) throws Exception {
         log.debug("REST request to save HipsterPoi : {}", hipsterPoi);
         if (hipsterPoi.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("hipsterPoi", "idexists", "A new hipsterPoi cannot already have an ID")).body(null);
         }
+        resolveGeoCode(hipsterPoi);
         HipsterPoi result = hipsterPoiRepository.save(hipsterPoi);
         return ResponseEntity.created(new URI("/api/hipsterPois/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("hipsterPoi", result.getId().toString()))
@@ -54,16 +67,18 @@ public class HipsterPoiResource {
 
     /**
      * PUT  /hipsterPois -> Updates an existing hipsterPoi.
+     * @throws Exception 
      */
     @RequestMapping(value = "/hipsterPois",
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<HipsterPoi> updateHipsterPoi(@Valid @RequestBody HipsterPoi hipsterPoi) throws URISyntaxException {
+    public ResponseEntity<HipsterPoi> updateHipsterPoi(@Valid @RequestBody HipsterPoi hipsterPoi) throws Exception {
         log.debug("REST request to update HipsterPoi : {}", hipsterPoi);
         if (hipsterPoi.getId() == null) {
             return createHipsterPoi(hipsterPoi);
         }
+        resolveGeoCode(hipsterPoi);
         HipsterPoi result = hipsterPoiRepository.save(hipsterPoi);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert("hipsterPoi", hipsterPoi.getId().toString()))
@@ -114,4 +129,13 @@ public class HipsterPoiResource {
         hipsterPoiRepository.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("hipsterPoi", id.toString())).build();
     }
+    
+    private void resolveGeoCode(HipsterPoi hipsterPoi) throws Exception {
+		if (hipsterPoi.getAdress() != null && hipsterPoi.getLatitude() == null && hipsterPoi.getLongitude() == null) {
+        	GeoLocation geoCodeForAdress = geoCodingService.getGeoCodeForAdress(hipsterPoi.getAdress());
+        	hipsterPoi.setAdress(geoCodeForAdress.getFormatted_address());
+        	hipsterPoi.setLatitude(geoCodeForAdress.getGeometry().getLocation().getLat());
+        	hipsterPoi.setLongitude(geoCodeForAdress.getGeometry().getLocation().getLng());
+        }
+	}
 }
