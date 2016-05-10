@@ -1,6 +1,6 @@
 package com.mycompany.demo.jhipsterhol.service;
 
-import com.mycompany.demo.jhipsterhol.Application;
+import com.mycompany.demo.jhipsterhol.JhipsterholApp;
 import com.mycompany.demo.jhipsterhol.domain.PersistentToken;
 import com.mycompany.demo.jhipsterhol.domain.User;
 import com.mycompany.demo.jhipsterhol.repository.PersistentTokenRepository;
@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.*;
  * @see UserService
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = JhipsterholApp.class)
 @WebAppConfiguration
 @IntegrationTest
 @Transactional

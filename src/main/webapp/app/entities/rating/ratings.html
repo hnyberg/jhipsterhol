@@ -1,0 +1,64 @@
+<div>
+    <h2 translate="jhipsterholApp.rating.home.title">Ratings</h2>
+    <jhi-alert></jhi-alert>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-4 no-padding-left">
+                <button class="btn btn-primary" ui-sref="rating.new" >
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span  translate="jhipsterholApp.rating.home.createLabel">
+                        Create new Rating
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="table-responsive">
+        <table class="jh-table table table-striped">
+            <thead>
+                <tr>
+                    <th><span translate="global.field.id">ID</span></th>
+                    <th><span translate="jhipsterholApp.rating.value">Value</span></th>
+                    <th><span translate="jhipsterholApp.rating.user">User</span></th>
+                    <th><span translate="jhipsterholApp.rating.hipsterPoi">Hipster Poi</span></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="rating in vm.ratings track by rating.id">
+                    <td><a ui-sref="rating-detail({id:rating.id})">{{rating.id}}</a></td>
+                    <td>{{rating.value}}</td>
+                    <td>
+                        {{rating.user.firstName}}
+                    </td>
+                    <td>
+                        <a ui-sref="hipster-poi-detail({id:rating.hipsterPoi.id})">{{rating.hipsterPoi.title}}</a>
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group flex-btn-group-container">
+                            <button type="submit"
+                                    ui-sref="rating-detail({id:rating.id})"
+                                    class="btn btn-info btn-sm">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                                <span class="hidden-xs hidden-sm" translate="entity.action.view"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="rating.edit({id:rating.id})"
+                                    class="btn btn-primary btn-sm">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                                <span class="hidden-xs hidden-sm" translate="entity.action.edit"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="rating.delete({id:rating.id})"
+                                    class="btn btn-danger btn-sm">
+                                <span class="glyphicon glyphicon-remove-circle"></span>
+                                <span class="hidden-xs hidden-sm" translate="entity.action.delete"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,6 +1,6 @@
 package com.mycompany.demo.jhipsterhol.web.rest;
 
-import com.mycompany.demo.jhipsterhol.Application;
+import com.mycompany.demo.jhipsterhol.JhipsterholApp;
 import com.mycompany.demo.jhipsterhol.domain.HipsterPoi;
 import com.mycompany.demo.jhipsterhol.repository.HipsterPoiRepository;
 
@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @see HipsterPoiResource
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = JhipsterholApp.class)
 @WebAppConfiguration
 @IntegrationTest
 public class HipsterPoiResourceIntTest {
@@ -91,7 +91,7 @@ public class HipsterPoiResourceIntTest {
 
         // Create the HipsterPoi
 
-        restHipsterPoiMockMvc.perform(post("/api/hipsterPois")
+        restHipsterPoiMockMvc.perform(post("/api/hipster-pois")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(hipsterPoi)))
                 .andExpect(status().isCreated());
@@ -115,7 +115,7 @@ public class HipsterPoiResourceIntTest {
 
         // Create the HipsterPoi, which fails.
 
-        restHipsterPoiMockMvc.perform(post("/api/hipsterPois")
+        restHipsterPoiMockMvc.perform(post("/api/hipster-pois")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(hipsterPoi)))
                 .andExpect(status().isBadRequest());
@@ -131,7 +131,7 @@ public class HipsterPoiResourceIntTest {
         hipsterPoiRepository.saveAndFlush(hipsterPoi);
 
         // Get all the hipsterPois
-        restHipsterPoiMockMvc.perform(get("/api/hipsterPois?sort=id,desc"))
+        restHipsterPoiMockMvc.perform(get("/api/hipster-pois?sort=id,desc"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(hipsterPoi.getId().intValue())))
@@ -148,7 +148,7 @@ public class HipsterPoiResourceIntTest {
         hipsterPoiRepository.saveAndFlush(hipsterPoi);
 
         // Get the hipsterPoi
-        restHipsterPoiMockMvc.perform(get("/api/hipsterPois/{id}", hipsterPoi.getId()))
+        restHipsterPoiMockMvc.perform(get("/api/hipster-pois/{id}", hipsterPoi.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(hipsterPoi.getId().intValue()))
@@ -162,7 +162,7 @@ public class HipsterPoiResourceIntTest {
     @Transactional
     public void getNonExistingHipsterPoi() throws Exception {
         // Get the hipsterPoi
-        restHipsterPoiMockMvc.perform(get("/api/hipsterPois/{id}", Long.MAX_VALUE))
+        restHipsterPoiMockMvc.perform(get("/api/hipster-pois/{id}", Long.MAX_VALUE))
                 .andExpect(status().isNotFound());
     }
 
@@ -171,18 +171,19 @@ public class HipsterPoiResourceIntTest {
     public void updateHipsterPoi() throws Exception {
         // Initialize the database
         hipsterPoiRepository.saveAndFlush(hipsterPoi);
-
-		int databaseSizeBeforeUpdate = hipsterPoiRepository.findAll().size();
+        int databaseSizeBeforeUpdate = hipsterPoiRepository.findAll().size();
 
         // Update the hipsterPoi
-        hipsterPoi.setTitle(UPDATED_TITLE);
-        hipsterPoi.setAdress(UPDATED_ADRESS);
-        hipsterPoi.setLatitude(UPDATED_LATITUDE);
-        hipsterPoi.setLongitude(UPDATED_LONGITUDE);
+        HipsterPoi updatedHipsterPoi = new HipsterPoi();
+        updatedHipsterPoi.setId(hipsterPoi.getId());
+        updatedHipsterPoi.setTitle(UPDATED_TITLE);
+        updatedHipsterPoi.setAdress(UPDATED_ADRESS);
+        updatedHipsterPoi.setLatitude(UPDATED_LATITUDE);
+        updatedHipsterPoi.setLongitude(UPDATED_LONGITUDE);
 
-        restHipsterPoiMockMvc.perform(put("/api/hipsterPois")
+        restHipsterPoiMockMvc.perform(put("/api/hipster-pois")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(hipsterPoi)))
+                .content(TestUtil.convertObjectToJsonBytes(updatedHipsterPoi)))
                 .andExpect(status().isOk());
 
         // Validate the HipsterPoi in the database
@@ -200,11 +201,10 @@ public class HipsterPoiResourceIntTest {
     public void deleteHipsterPoi() throws Exception {
         // Initialize the database
         hipsterPoiRepository.saveAndFlush(hipsterPoi);
-
-		int databaseSizeBeforeDelete = hipsterPoiRepository.findAll().size();
+        int databaseSizeBeforeDelete = hipsterPoiRepository.findAll().size();
 
         // Get the hipsterPoi
-        restHipsterPoiMockMvc.perform(delete("/api/hipsterPois/{id}", hipsterPoi.getId())
+        restHipsterPoiMockMvc.perform(delete("/api/hipster-pois/{id}", hipsterPoi.getId())
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
 

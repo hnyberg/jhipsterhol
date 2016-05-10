@@ -4,10 +4,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -18,22 +15,19 @@ import java.util.Objects;
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Rating implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotNull
-    @Min(value = 0)
-    @Max(value = 5)
-    @Column(name = "value", nullable = false)
+    @Column(name = "value")
     private Integer value;
-    
+
     @ManyToOne
-    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "hipster_poi_id")
     private HipsterPoi hipsterPoi;
 
     public Long getId() {
@@ -47,7 +41,7 @@ public class Rating implements Serializable {
     public Integer getValue() {
         return value;
     }
-    
+
     public void setValue(Integer value) {
         this.value = value;
     }

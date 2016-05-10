@@ -11,14 +11,19 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+management:
+    context-path: /management
+
 spring:
+    application:
+        name: jhipsterhol
     jpa:
         open-in-view: false
         hibernate:
             ddl-auto: none
             naming-strategy: org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
     messages:
-        basename: classpath:/i18n/messages
+        basename: i18n/messages
     mvc:
         favicon:
             enabled: false
@@ -47,15 +52,16 @@ jhipster:
         #max-age: 1800
     mail:
         from: jhipsterhol@localhost
-    security:
-        rememberme:
-            # security key (this key should be unique for your application, and kept secret)
-            key: c7e9ab04caf072ae3987bbfdb52f634b3128308d
     swagger:
         title: jhipsterhol API
         description: jhipsterhol API documentation
         version: 0.0.1
         termsOfServiceUrl:
-        contact:
+        contactName:
+        contactUrl:
+        contactEmail:
         license:
         licenseUrl:
+    ribbon:
+        # comma seperated list of profiles to show a ribbon on the GUI
+        displayOnActiveProfiles: dev
