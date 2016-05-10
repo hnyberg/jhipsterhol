@@ -10,6 +10,7 @@ import java.util.List;
 /**
  * Spring Data JPA repository for the HipsterPoi entity.
  */
+@SuppressWarnings("unused")
 public interface HipsterPoiRepository extends JpaRepository<HipsterPoi,Long> {
 
     @Query("select hipsterPoi from HipsterPoi hipsterPoi where hipsterPoi.user.login = ?#{principal.username}")

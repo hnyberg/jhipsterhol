@@ -2,7 +2,7 @@
 
 describe('Controller Tests', function() {
 
-    describe('Type Detail Controller', function() {
+    describe('Type Management Detail Controller', function() {
         var $scope, $rootScope;
         var MockEntity, MockType, MockHipsterPoi;
         var createController;

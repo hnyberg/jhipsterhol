@@ -1,0 +1,25 @@
+
+<div>
+    <h2><span translate="jhipsterholApp.rating.detail.title">Rating</span> {{vm.rating.id}}</h2>
+    <hr>
+    <dl class="dl-horizontal jh-entity-details">
+        <dt><span translate="jhipsterholApp.rating.value">Value</span></dt>
+        <dd>
+            <span>{{vm.rating.value}}</span>
+        </dd>
+        <dt><span translate="jhipsterholApp.rating.user">User</span></dt>
+        <dd>
+            {{vm.rating.user.firstName}}
+        </dd>
+        <dt><span translate="jhipsterholApp.rating.hipsterPoi">Hipster Poi</span></dt>
+        <dd>
+            <a ui-sref="hipster-poi-detail({id:vm.rating.hipsterPoi.id})">{{vm.rating.hipsterPoi.title}}</a>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

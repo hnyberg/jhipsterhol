@@ -1,6 +1,6 @@
 package com.mycompany.demo.jhipsterhol.web.rest;
 
-import com.mycompany.demo.jhipsterhol.Application;
+import com.mycompany.demo.jhipsterhol.JhipsterholApp;
 import com.mycompany.demo.jhipsterhol.domain.Rating;
 import com.mycompany.demo.jhipsterhol.repository.RatingRepository;
 
@@ -36,14 +36,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @see RatingResource
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = JhipsterholApp.class)
 @WebAppConfiguration
 @IntegrationTest
 public class RatingResourceIntTest {
 
 
-    private static final Integer DEFAULT_VALUE = 0;
-    private static final Integer UPDATED_VALUE = 1;
+    private static final Integer DEFAULT_VALUE = 1;
+    private static final Integer UPDATED_VALUE = 2;
 
     @Inject
     private RatingRepository ratingRepository;
@@ -95,24 +95,6 @@ public class RatingResourceIntTest {
 
     @Test
     @Transactional
-    public void checkValueIsRequired() throws Exception {
-        int databaseSizeBeforeTest = ratingRepository.findAll().size();
-        // set the field null
-        rating.setValue(null);
-
-        // Create the Rating, which fails.
-
-        restRatingMockMvc.perform(post("/api/ratings")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(rating)))
-                .andExpect(status().isBadRequest());
-
-        List<Rating> ratings = ratingRepository.findAll();
-        assertThat(ratings).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     public void getAllRatings() throws Exception {
         // Initialize the database
         ratingRepository.saveAndFlush(rating);
@@ -152,15 +134,16 @@ public class RatingResourceIntTest {
     public void updateRating() throws Exception {
         // Initialize the database
         ratingRepository.saveAndFlush(rating);
-
-		int databaseSizeBeforeUpdate = ratingRepository.findAll().size();
+        int databaseSizeBeforeUpdate = ratingRepository.findAll().size();
 
         // Update the rating
-        rating.setValue(UPDATED_VALUE);
+        Rating updatedRating = new Rating();
+        updatedRating.setId(rating.getId());
+        updatedRating.setValue(UPDATED_VALUE);
 
         restRatingMockMvc.perform(put("/api/ratings")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(rating)))
+                .content(TestUtil.convertObjectToJsonBytes(updatedRating)))
                 .andExpect(status().isOk());
 
         // Validate the Rating in the database
@@ -175,8 +158,7 @@ public class RatingResourceIntTest {
     public void deleteRating() throws Exception {
         // Initialize the database
         ratingRepository.saveAndFlush(rating);
-
-		int databaseSizeBeforeDelete = ratingRepository.findAll().size();
+        int databaseSizeBeforeDelete = ratingRepository.findAll().size();
 
         // Get the rating
         restRatingMockMvc.perform(delete("/api/ratings/{id}", rating.getId())

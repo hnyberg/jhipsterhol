@@ -4,11 +4,8 @@ import com.codahale.metrics.annotation.Timed;
 import com.mycompany.demo.jhipsterhol.domain.Rating;
 import com.mycompany.demo.jhipsterhol.repository.RatingRepository;
 import com.mycompany.demo.jhipsterhol.web.rest.util.HeaderUtil;
-import com.mycompany.demo.jhipsterhol.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
-import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -35,13 +31,17 @@ public class RatingResource {
     private RatingRepository ratingRepository;
     
     /**
-     * POST  /ratings -> Create a new rating.
+     * POST  /ratings : Create a new rating.
+     *
+     * @param rating the rating to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new rating, or with status 400 (Bad Request) if the rating has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @RequestMapping(value = "/ratings",
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Rating> createRating(@Valid @RequestBody Rating rating) throws URISyntaxException {
+    public ResponseEntity<Rating> createRating(@RequestBody Rating rating) throws URISyntaxException {
         log.debug("REST request to save Rating : {}", rating);
         if (rating.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("rating", "idexists", "A new rating cannot already have an ID")).body(null);
@@ -53,13 +53,19 @@ public class RatingResource {
     }
 
     /**
-     * PUT  /ratings -> Updates an existing rating.
+     * PUT  /ratings : Updates an existing rating.
+     *
+     * @param rating the rating to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated rating,
+     * or with status 400 (Bad Request) if the rating is not valid,
+     * or with status 500 (Internal Server Error) if the rating couldnt be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @RequestMapping(value = "/ratings",
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Rating> updateRating(@Valid @RequestBody Rating rating) throws URISyntaxException {
+    public ResponseEntity<Rating> updateRating(@RequestBody Rating rating) throws URISyntaxException {
         log.debug("REST request to update Rating : {}", rating);
         if (rating.getId() == null) {
             return createRating(rating);
@@ -71,22 +77,25 @@ public class RatingResource {
     }
 
     /**
-     * GET  /ratings -> get all the ratings.
+     * GET  /ratings : get all the ratings.
+     *
+     * @return the ResponseEntity with status 200 (OK) and the list of ratings in body
      */
     @RequestMapping(value = "/ratings",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<Rating>> getAllRatings(Pageable pageable)
-        throws URISyntaxException {
-        log.debug("REST request to get a page of Ratings");
-        Page<Rating> page = ratingRepository.findAll(pageable); 
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/ratings");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    public List<Rating> getAllRatings() {
+        log.debug("REST request to get all Ratings");
+        List<Rating> ratings = ratingRepository.findAll();
+        return ratings;
     }
 
     /**
-     * GET  /ratings/:id -> get the "id" rating.
+     * GET  /ratings/:id : get the "id" rating.
+     *
+     * @param id the id of the rating to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the rating, or with status 404 (Not Found)
      */
     @RequestMapping(value = "/ratings/{id}",
         method = RequestMethod.GET,
@@ -103,7 +112,10 @@ public class RatingResource {
     }
 
     /**
-     * DELETE  /ratings/:id -> delete the "id" rating.
+     * DELETE  /ratings/:id : delete the "id" rating.
+     *
+     * @param id the id of the rating to delete
+     * @return the ResponseEntity with status 200 (OK)
      */
     @RequestMapping(value = "/ratings/{id}",
         method = RequestMethod.DELETE,
@@ -114,4 +126,5 @@ public class RatingResource {
         ratingRepository.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("rating", id.toString())).build();
     }
+
 }

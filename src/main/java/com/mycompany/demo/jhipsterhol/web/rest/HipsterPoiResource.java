@@ -1,34 +1,25 @@
 package com.mycompany.demo.jhipsterhol.web.rest;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Optional;
-
-import javax.inject.Inject;
-import javax.validation.Valid;
-
+import com.codahale.metrics.annotation.Timed;
+import com.mycompany.demo.jhipsterhol.domain.HipsterPoi;
+import com.mycompany.demo.jhipsterhol.repository.HipsterPoiRepository;
+import com.mycompany.demo.jhipsterhol.web.rest.util.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.codahale.metrics.annotation.Timed;
-import com.mycompany.demo.jhipsterhol.domain.HipsterPoi;
-import com.mycompany.demo.jhipsterhol.repository.HipsterPoiRepository;
+import javax.inject.Inject;
+import javax.validation.Valid;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
 import com.mycompany.demo.jhipsterhol.service.GeoCodingService;
 import com.mycompany.demo.jhipsterhol.service.GeoCodingService.GeoLocation;
-import com.mycompany.demo.jhipsterhol.web.rest.util.HeaderUtil;
-import com.mycompany.demo.jhipsterhol.web.rest.util.PaginationUtil;
 
 /**
  * REST controller for managing HipsterPoi.
@@ -42,38 +33,43 @@ public class HipsterPoiResource {
     @Inject
     private HipsterPoiRepository hipsterPoiRepository;
     
-    @Inject
-	private GeoCodingService geoCodingService;
-    
     /**
-     * POST  /hipsterPois -> Create a new hipsterPoi.
-     * @throws Exception 
+     * POST  /hipster-pois : Create a new hipsterPoi.
+     *
+     * @param hipsterPoi the hipsterPoi to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new hipsterPoi, or with status 400 (Bad Request) if the hipsterPoi has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @RequestMapping(value = "/hipsterPois",
+    @RequestMapping(value = "/hipster-pois",
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<HipsterPoi> createHipsterPoi(@Valid @RequestBody HipsterPoi hipsterPoi) throws Exception {
+    public ResponseEntity<HipsterPoi> createHipsterPoi(@Valid @RequestBody HipsterPoi hipsterPoi) throws URISyntaxException, Exception {
         log.debug("REST request to save HipsterPoi : {}", hipsterPoi);
         if (hipsterPoi.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("hipsterPoi", "idexists", "A new hipsterPoi cannot already have an ID")).body(null);
         }
         resolveGeoCode(hipsterPoi);
         HipsterPoi result = hipsterPoiRepository.save(hipsterPoi);
-        return ResponseEntity.created(new URI("/api/hipsterPois/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/hipster-pois/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("hipsterPoi", result.getId().toString()))
             .body(result);
     }
 
     /**
-     * PUT  /hipsterPois -> Updates an existing hipsterPoi.
-     * @throws Exception 
+     * PUT  /hipster-pois : Updates an existing hipsterPoi.
+     *
+     * @param hipsterPoi the hipsterPoi to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated hipsterPoi,
+     * or with status 400 (Bad Request) if the hipsterPoi is not valid,
+     * or with status 500 (Internal Server Error) if the hipsterPoi couldnt be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @RequestMapping(value = "/hipsterPois",
+    @RequestMapping(value = "/hipster-pois",
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<HipsterPoi> updateHipsterPoi(@Valid @RequestBody HipsterPoi hipsterPoi) throws Exception {
+    public ResponseEntity<HipsterPoi> updateHipsterPoi(@Valid @RequestBody HipsterPoi hipsterPoi) throws URISyntaxException, Exception{
         log.debug("REST request to update HipsterPoi : {}", hipsterPoi);
         if (hipsterPoi.getId() == null) {
             return createHipsterPoi(hipsterPoi);
@@ -86,24 +82,27 @@ public class HipsterPoiResource {
     }
 
     /**
-     * GET  /hipsterPois -> get all the hipsterPois.
+     * GET  /hipster-pois : get all the hipsterPois.
+     *
+     * @return the ResponseEntity with status 200 (OK) and the list of hipsterPois in body
      */
-    @RequestMapping(value = "/hipsterPois",
+    @RequestMapping(value = "/hipster-pois",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<HipsterPoi>> getAllHipsterPois(Pageable pageable)
-        throws URISyntaxException {
-        log.debug("REST request to get a page of HipsterPois");
-        Page<HipsterPoi> page = hipsterPoiRepository.findAll(pageable); 
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/hipsterPois");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    public List<HipsterPoi> getAllHipsterPois() {
+        log.debug("REST request to get all HipsterPois");
+        List<HipsterPoi> hipsterPois = hipsterPoiRepository.findAllWithEagerRelationships();
+        return hipsterPois;
     }
 
     /**
-     * GET  /hipsterPois/:id -> get the "id" hipsterPoi.
+     * GET  /hipster-pois/:id : get the "id" hipsterPoi.
+     *
+     * @param id the id of the hipsterPoi to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the hipsterPoi, or with status 404 (Not Found)
      */
-    @RequestMapping(value = "/hipsterPois/{id}",
+    @RequestMapping(value = "/hipster-pois/{id}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -118,9 +117,12 @@ public class HipsterPoiResource {
     }
 
     /**
-     * DELETE  /hipsterPois/:id -> delete the "id" hipsterPoi.
+     * DELETE  /hipster-pois/:id : delete the "id" hipsterPoi.
+     *
+     * @param id the id of the hipsterPoi to delete
+     * @return the ResponseEntity with status 200 (OK)
      */
-    @RequestMapping(value = "/hipsterPois/{id}",
+    @RequestMapping(value = "/hipster-pois/{id}",
         method = RequestMethod.DELETE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -129,13 +131,17 @@ public class HipsterPoiResource {
         hipsterPoiRepository.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("hipsterPoi", id.toString())).build();
     }
-    
+
+    @Inject
+    private GeoCodingService geoCodingService;
+
     private void resolveGeoCode(HipsterPoi hipsterPoi) throws Exception {
-		if (hipsterPoi.getAdress() != null && hipsterPoi.getLatitude() == null && hipsterPoi.getLongitude() == null) {
-        	GeoLocation geoCodeForAdress = geoCodingService.getGeoCodeForAdress(hipsterPoi.getAdress());
-        	hipsterPoi.setAdress(geoCodeForAdress.getFormatted_address());
-        	hipsterPoi.setLatitude(geoCodeForAdress.getGeometry().getLocation().getLat());
-        	hipsterPoi.setLongitude(geoCodeForAdress.getGeometry().getLocation().getLng());
+        if (hipsterPoi.getAdress() != null && hipsterPoi.getLatitude() == null && hipsterPoi.getLongitude() == null) {
+            GeoLocation geoCodeForAdress = geoCodingService.getGeoCodeForAdress(hipsterPoi.getAdress());
+            hipsterPoi.setAdress(geoCodeForAdress.getFormatted_address());
+            hipsterPoi.setLatitude(geoCodeForAdress.getGeometry().getLocation().getLat());
+            hipsterPoi.setLongitude(geoCodeForAdress.getGeometry().getLocation().getLng());
         }
-	}
+    }
+
 }

@@ -1,0 +1,72 @@
+<div>
+    <h2 translate="jhipsterholApp.hipsterPoi.home.title">Hipster Pois</h2>
+    <jhi-alert></jhi-alert>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-4 no-padding-left">
+                <button class="btn btn-primary" ui-sref="hipster-poi.new" >
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span  translate="jhipsterholApp.hipsterPoi.home.createLabel">
+                        Create new Hipster Poi
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="table-responsive">
+        <table class="jh-table table table-striped">
+            <thead>
+                <tr>
+                    <th><span translate="global.field.id">ID</span></th>
+                    <th><span translate="jhipsterholApp.hipsterPoi.title">Title</span></th>
+                    <th><span translate="jhipsterholApp.hipsterPoi.adress">Adress</span></th>
+                    <th><span translate="jhipsterholApp.hipsterPoi.latitude">Latitude</span></th>
+                    <th><span translate="jhipsterholApp.hipsterPoi.longitude">Longitude</span></th>
+                    <th><span translate="jhipsterholApp.hipsterPoi.type">Type</span></th>
+                    <th><span translate="jhipsterholApp.hipsterPoi.user">User</span></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="hipsterPoi in vm.hipsterPois track by hipsterPoi.id">
+                    <td><a ui-sref="hipster-poi-detail({id:hipsterPoi.id})">{{hipsterPoi.id}}</a></td>
+                    <td>{{hipsterPoi.title}}</td>
+                    <td>{{hipsterPoi.adress}}</td>
+                    <td>{{hipsterPoi.latitude}}</td>
+                    <td>{{hipsterPoi.longitude}}</td>
+                    <td>
+                        <span ng-repeat="type in hipsterPoi.types">
+                            <a class="form-control-static" ui-sref="type-detail({id: {{type.id}}})">{{type.title}}</a>{{$last ? '' : ', '}}
+                        </span>
+                    </td>
+                    <td>
+                        {{hipsterPoi.user.firstName}}
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group flex-btn-group-container">
+                            <button type="submit"
+                                    ui-sref="hipster-poi-detail({id:hipsterPoi.id})"
+                                    class="btn btn-info btn-sm">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                                <span class="hidden-xs hidden-sm" translate="entity.action.view"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="hipster-poi.edit({id:hipsterPoi.id})"
+                                    class="btn btn-primary btn-sm">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                                <span class="hidden-xs hidden-sm" translate="entity.action.edit"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="hipster-poi.delete({id:hipsterPoi.id})"
+                                    class="btn btn-danger btn-sm">
+                                <span class="glyphicon glyphicon-remove-circle"></span>
+                                <span class="hidden-xs hidden-sm" translate="entity.action.delete"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

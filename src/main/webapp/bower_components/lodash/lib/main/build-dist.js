@@ -1,11 +1,9 @@
 'use strict';
 
-var _ = require('lodash'),
-    async = require('async'),
-    fs = require('fs-extra'),
+var async = require('async'),
     path = require('path');
 
-var minify = require('../common/minify.js');
+var file = require('../common/file');
 
 var basePath = path.join(__dirname, '..', '..'),
     distPath = path.join(basePath, 'dist'),
@@ -22,7 +20,11 @@ function onComplete(error) {
   }
 }
 
-async.series([
-  _.partial(fs.copy, baseLodash, distLodash),
-  _.partial(minify, distLodash)
-], onComplete);
+function build() {
+  async.series([
+    file.copy(baseLodash, distLodash),
+    file.min(distLodash)
+  ], onComplete);
+}
+
+build();

@@ -1,0 +1,66 @@
+
+<form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+        <h4 class="modal-title" id="myHipsterPoiLabel" translate="jhipsterholApp.hipsterPoi.home.createOrEditLabel">Create or edit a Hipster Poi</h4>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" ng-show="vm.hipsterPoi.id">
+            <label for="id" translate="global.field.id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="vm.hipsterPoi.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="jhipsterholApp.hipsterPoi.title" for="field_title">Title</label>
+            <input type="text" class="form-control" name="title" id="field_title"
+                    ng-model="vm.hipsterPoi.title"
+                    required />
+            <div ng-show="editForm.title.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.title.$error.required" translate="entity.validation.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="jhipsterholApp.hipsterPoi.adress" for="field_adress">Adress</label>
+            <input type="text" class="form-control" name="adress" id="field_adress"
+                    ng-model="vm.hipsterPoi.adress"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="jhipsterholApp.hipsterPoi.latitude" for="field_latitude">Latitude</label>
+            <input type="number" class="form-control" name="latitude" id="field_latitude"
+                    ng-model="vm.hipsterPoi.latitude"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="jhipsterholApp.hipsterPoi.longitude" for="field_longitude">Longitude</label>
+            <input type="number" class="form-control" name="longitude" id="field_longitude"
+                    ng-model="vm.hipsterPoi.longitude"
+                     />
+        </div>
+
+        <div class="form-group">
+            <label translate="jhipsterholApp.hipsterPoi.type" for="field_type">Type</label>
+            <select class="form-control" id="field_type" multiple name="type" ng-model="vm.hipsterPoi.types" ng-options="type as type.title for type in vm.types track by type.id"></select>
+        </div>
+        <div class="form-group">
+            <label translate="jhipsterholApp.hipsterPoi.user" for="field_user">User</label>
+            <select class="form-control" id="field_user" name="user" ng-model="vm.hipsterPoi.user" ng-options="user as user.firstName for user in vm.users track by user.id">
+                <option value=""></option>
+            </select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
+        </button>
+    </div>
+</form>

@@ -1,0 +1,30 @@
+entity Type {
+	title String required
+}
+
+entity HipsterPoi {
+	title String required
+    adress String
+    latitude Double
+    longitude Double
+}
+
+entity Rating {
+	value Integer
+}
+
+relationship ManyToMany {
+	HipsterPoi{type(title)} to Type{hipsterPoi}
+}
+
+relationship ManyToOne {
+	HipsterPoi{user(firstName)} to User
+}
+
+relationship OneToMany {
+	HipsterPoi{rating} to Rating{hipsterPoi(title)}
+}
+
+relationship ManyToOne {
+	Rating{user(firstName)} to User
+}
