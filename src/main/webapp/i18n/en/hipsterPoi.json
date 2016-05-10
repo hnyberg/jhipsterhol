@@ -2,27 +2,27 @@
     "jhipsterholApp": {
         "hipsterPoi" : {
             "home": {
-                "title": "HipsterPois",
-                "createLabel": "Create a new HipsterPoi",
-                "createOrEditLabel": "Create or edit a HipsterPoi",
-                "search": "Search for HipsterPoi"
+                "title": "Hipster Pois",
+                "createLabel": "Create a new Hipster Poi",
+                "createOrEditLabel": "Create or edit a Hipster Poi",
+                "search": "Search for Hipster Poi"
             },
-            "created": "A new HipsterPoi is created with identifier {{ param }}",
-            "updated": "A HipsterPoi is updated with identifier {{ param }}",
-            "deleted": "A HipsterPoi is deleted with identifier {{ param }}",
+            "created": "A new Hipster Poi is created with identifier {{ param }}",
+            "updated": "A Hipster Poi is updated with identifier {{ param }}",
+            "deleted": "A Hipster Poi is deleted with identifier {{ param }}",
             "delete": {
-                "question": "Are you sure you want to delete HipsterPoi {{ id }}?"
+                "question": "Are you sure you want to delete Hipster Poi {{ id }}?"
             },
             "detail": {
-                "title": "HipsterPoi"
+                "title": "Hipster Poi"
             },
             "title": "Title",
             "adress": "Adress",
             "latitude": "Latitude",
             "longitude": "Longitude",
+            "type": "Type",
             "user": "User",
-            "rating": "Rating",
-            "type": "Type"
+            "rating": "Rating"
         }
     }
 }

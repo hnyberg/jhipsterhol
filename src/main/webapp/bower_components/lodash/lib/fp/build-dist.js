@@ -5,7 +5,7 @@ var _ = require('lodash'),
     path = require('path'),
     webpack = require('webpack');
 
-var minify = require('../common/minify.js');
+var file = require('../common/file');
 
 var basePath = path.join(__dirname, '..', '..'),
     distPath = path.join(basePath, 'dist'),
@@ -44,8 +44,12 @@ function onComplete(error) {
   }
 }
 
-async.series([
-  _.partial(webpack, mappingConfig),
-  _.partial(webpack, fpConfig),
-  _.partial(minify, path.join(distPath, filename))
-], onComplete);
+function build() {
+  async.series([
+    _.partial(webpack, mappingConfig),
+    _.partial(webpack, fpConfig),
+    file.min(path.join(distPath, filename))
+  ], onComplete);
+}
+
+build();

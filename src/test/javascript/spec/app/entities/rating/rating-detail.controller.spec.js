@@ -2,7 +2,7 @@
 
 describe('Controller Tests', function() {
 
-    describe('Rating Detail Controller', function() {
+    describe('Rating Management Detail Controller', function() {
         var $scope, $rootScope;
         var MockEntity, MockRating, MockUser, MockHipsterPoi;
         var createController;

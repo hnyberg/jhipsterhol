@@ -1,26 +1,26 @@
 {
-    "relationships": [
-        {
-            "relationshipId": 1,
-            "relationshipName": "hipsterPoi",
-            "otherEntityName": "hipsterPoi",
-            "relationshipType": "many-to-many",
-            "ownerSide": false,
-            "otherEntityRelationshipName": "type"
-        }
-    ],
-    "fields": [
-        {
-            "fieldId": 1,
-            "fieldName": "title",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
-        }
-    ],
-    "changelogDate": "20160127141946",
-    "dto": "no",
-    "service": "no",
-    "pagination": "no"
+  "relationships": [
+    {
+      "relationshipId": 1,
+      "relationshipName": "hipsterPoi",
+      "otherEntityName": "hipsterPoi",
+      "relationshipType": "many-to-many",
+      "ownerSide": false,
+      "otherEntityRelationshipName": "type"
+    }
+  ],
+  "fields": [
+    {
+      "fieldId": 1,
+      "fieldName": "title",
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required"
+      ]
+    }
+  ],
+  "changelogDate": "20160510203024",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no"
 }

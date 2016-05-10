@@ -32,7 +32,11 @@ public class TypeResource {
     private TypeRepository typeRepository;
     
     /**
-     * POST  /types -> Create a new type.
+     * POST  /types : Create a new type.
+     *
+     * @param type the type to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new type, or with status 400 (Bad Request) if the type has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @RequestMapping(value = "/types",
         method = RequestMethod.POST,
@@ -50,7 +54,13 @@ public class TypeResource {
     }
 
     /**
-     * PUT  /types -> Updates an existing type.
+     * PUT  /types : Updates an existing type.
+     *
+     * @param type the type to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated type,
+     * or with status 400 (Bad Request) if the type is not valid,
+     * or with status 500 (Internal Server Error) if the type couldnt be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @RequestMapping(value = "/types",
         method = RequestMethod.PUT,
@@ -68,7 +78,9 @@ public class TypeResource {
     }
 
     /**
-     * GET  /types -> get all the types.
+     * GET  /types : get all the types.
+     *
+     * @return the ResponseEntity with status 200 (OK) and the list of types in body
      */
     @RequestMapping(value = "/types",
         method = RequestMethod.GET,
@@ -76,11 +88,15 @@ public class TypeResource {
     @Timed
     public List<Type> getAllTypes() {
         log.debug("REST request to get all Types");
-        return typeRepository.findAll();
-            }
+        List<Type> types = typeRepository.findAll();
+        return types;
+    }
 
     /**
-     * GET  /types/:id -> get the "id" type.
+     * GET  /types/:id : get the "id" type.
+     *
+     * @param id the id of the type to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the type, or with status 404 (Not Found)
      */
     @RequestMapping(value = "/types/{id}",
         method = RequestMethod.GET,
@@ -97,7 +113,10 @@ public class TypeResource {
     }
 
     /**
-     * DELETE  /types/:id -> delete the "id" type.
+     * DELETE  /types/:id : delete the "id" type.
+     *
+     * @param id the id of the type to delete
+     * @return the ResponseEntity with status 200 (OK)
      */
     @RequestMapping(value = "/types/{id}",
         method = RequestMethod.DELETE,
@@ -108,4 +127,5 @@ public class TypeResource {
         typeRepository.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("type", id.toString())).build();
     }
+
 }

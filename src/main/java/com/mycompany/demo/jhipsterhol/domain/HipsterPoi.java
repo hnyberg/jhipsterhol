@@ -19,6 +19,8 @@ import java.util.Objects;
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class HipsterPoi implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -26,24 +28,15 @@ public class HipsterPoi implements Serializable {
     @NotNull
     @Column(name = "title", nullable = false)
     private String title;
-    
+
     @Column(name = "adress")
     private String adress;
-    
+
     @Column(name = "latitude")
     private Double latitude;
-    
+
     @Column(name = "longitude")
     private Double longitude;
-    
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @OneToMany(mappedBy = "hipsterPoi")
-    @JsonIgnore
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Rating> ratings = new HashSet<>();
 
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -51,6 +44,14 @@ public class HipsterPoi implements Serializable {
                joinColumns = @JoinColumn(name="hipster_pois_id", referencedColumnName="ID"),
                inverseJoinColumns = @JoinColumn(name="types_id", referencedColumnName="ID"))
     private Set<Type> types = new HashSet<>();
+
+    @ManyToOne
+    private User user;
+
+    @OneToMany(mappedBy = "hipsterPoi")
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Rating> ratings = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -63,7 +64,7 @@ public class HipsterPoi implements Serializable {
     public String getTitle() {
         return title;
     }
-    
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -71,7 +72,7 @@ public class HipsterPoi implements Serializable {
     public String getAdress() {
         return adress;
     }
-    
+
     public void setAdress(String adress) {
         this.adress = adress;
     }
@@ -79,7 +80,7 @@ public class HipsterPoi implements Serializable {
     public Double getLatitude() {
         return latitude;
     }
-    
+
     public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
@@ -87,9 +88,17 @@ public class HipsterPoi implements Serializable {
     public Double getLongitude() {
         return longitude;
     }
-    
+
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+
+    public Set<Type> getTypes() {
+        return types;
+    }
+
+    public void setTypes(Set<Type> types) {
+        this.types = types;
     }
 
     public User getUser() {
@@ -106,14 +115,6 @@ public class HipsterPoi implements Serializable {
 
     public void setRatings(Set<Rating> ratings) {
         this.ratings = ratings;
-    }
-
-    public Set<Type> getTypes() {
-        return types;
-    }
-
-    public void setTypes(Set<Type> types) {
-        this.types = types;
     }
 
     @Override

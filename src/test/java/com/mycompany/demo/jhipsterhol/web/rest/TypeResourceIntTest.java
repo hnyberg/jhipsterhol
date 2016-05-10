@@ -1,6 +1,6 @@
 package com.mycompany.demo.jhipsterhol.web.rest;
 
-import com.mycompany.demo.jhipsterhol.Application;
+import com.mycompany.demo.jhipsterhol.JhipsterholApp;
 import com.mycompany.demo.jhipsterhol.domain.Type;
 import com.mycompany.demo.jhipsterhol.repository.TypeRepository;
 
@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @see TypeResource
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = JhipsterholApp.class)
 @WebAppConfiguration
 @IntegrationTest
 public class TypeResourceIntTest {
@@ -151,15 +151,16 @@ public class TypeResourceIntTest {
     public void updateType() throws Exception {
         // Initialize the database
         typeRepository.saveAndFlush(type);
-
-		int databaseSizeBeforeUpdate = typeRepository.findAll().size();
+        int databaseSizeBeforeUpdate = typeRepository.findAll().size();
 
         // Update the type
-        type.setTitle(UPDATED_TITLE);
+        Type updatedType = new Type();
+        updatedType.setId(type.getId());
+        updatedType.setTitle(UPDATED_TITLE);
 
         restTypeMockMvc.perform(put("/api/types")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(type)))
+                .content(TestUtil.convertObjectToJsonBytes(updatedType)))
                 .andExpect(status().isOk());
 
         // Validate the Type in the database
@@ -174,8 +175,7 @@ public class TypeResourceIntTest {
     public void deleteType() throws Exception {
         // Initialize the database
         typeRepository.saveAndFlush(type);
-
-		int databaseSizeBeforeDelete = typeRepository.findAll().size();
+        int databaseSizeBeforeDelete = typeRepository.findAll().size();
 
         // Get the type
         restTypeMockMvc.perform(delete("/api/types/{id}", type.getId())

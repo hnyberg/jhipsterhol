@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <!--
+        Added the constraints for entity HipsterPoi.
+    -->
+    <changeSet id="20160510203025-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="hipster_pois_id"
+                                 baseTableName="hipster_poi_type"
+                                 constraintName="fk_hipster_poi_type_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="hipster_poi"/>
+        <addForeignKeyConstraint baseColumnNames="types_id"
+                                 baseTableName="hipster_poi_type"
+                                 constraintName="fk_hipster_poi_type_hipsterpoi_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="type"/>
+        
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="hipster_poi"
+                                 constraintName="fk_hipsterpoi_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,15 @@
+version: '2'
+services:
+    jhipsterhol-app:
+        image: jhipsterhol
+        external_links:
+            - jhipsterhol-postgresql:postgresql
+        environment:
+            - SPRING_PROFILES_ACTIVE=prod
+            - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/jhipsterhol
+        ports:
+            - 8080:8080
+    jhipsterhol-postgresql:
+        extends:
+            file: postgresql.yml
+            service: jhipsterhol-postgresql

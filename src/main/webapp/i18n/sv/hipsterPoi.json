@@ -1,0 +1,28 @@
+{
+    "jhipsterholApp": {
+        "hipsterPoi" : {
+            "home": {
+                "title": "Hipster Pois",
+                "createLabel": "Skapa en ny Hipster Poi",
+                "createOrEditLabel": "Skapa eller ändra en Hipster Poi",
+                "search": "Sök efter Hipster Poi"
+            },
+            "created": "En ny Hipster Poi är skapad med id {{ param }}",
+            "updated": "En Hipster Poi är uppdaterad med id  {{ param }}",
+            "deleted": "En Hipster Poi är borttagen med id  {{ param }}",
+            "delete": {
+                "question": "Är du säker på att du vill ta bort Hipster Poi {{ id }}?"
+            },
+            "detail": {
+                "title": "Hipster Poi"
+            },
+            "title": "Title",
+            "adress": "Adress",
+            "latitude": "Latitude",
+            "longitude": "Longitude",
+            "type": "Type",
+            "user": "User",
+            "rating": "Rating"
+        }
+    }
+}

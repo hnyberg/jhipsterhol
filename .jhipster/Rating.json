@@ -1,36 +1,29 @@
 {
-    "relationships": [
-        {
-            "relationshipId": 1,
-            "relationshipName": "user",
-            "otherEntityName": "user",
-            "relationshipType": "many-to-one",
-            "otherEntityField": "firstName"
-        },
-        {
-            "relationshipId": 2,
-            "relationshipName": "hipsterPoi",
-            "otherEntityName": "hipsterPoi",
-            "relationshipType": "many-to-one",
-            "otherEntityField": "title"
-        }
-    ],
-    "fields": [
-        {
-            "fieldId": 1,
-            "fieldName": "value",
-            "fieldType": "Integer",
-            "fieldValidateRules": [
-                "required",
-                "min",
-                "max"
-            ],
-            "fieldValidateRulesMin": 0,
-            "fieldValidateRulesMax": "5"
-        }
-    ],
-    "changelogDate": "20160127144904",
-    "dto": "no",
-    "service": "no",
-    "pagination": "pager"
+  "relationships": [
+    {
+      "relationshipId": 1,
+      "relationshipName": "user",
+      "otherEntityName": "user",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "firstName"
+    },
+    {
+      "relationshipId": 2,
+      "relationshipName": "hipsterPoi",
+      "otherEntityName": "hipsterPoi",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "title"
+    }
+  ],
+  "fields": [
+    {
+      "fieldId": 1,
+      "fieldName": "value",
+      "fieldType": "Integer"
+    }
+  ],
+  "changelogDate": "20160510203026",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no"
 }

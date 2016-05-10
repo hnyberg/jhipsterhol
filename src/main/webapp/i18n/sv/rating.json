@@ -1,0 +1,24 @@
+{
+    "jhipsterholApp": {
+        "rating" : {
+            "home": {
+                "title": "Ratings",
+                "createLabel": "Skapa en ny Rating",
+                "createOrEditLabel": "Skapa eller ändra en Rating",
+                "search": "Sök efter Rating"
+            },
+            "created": "En ny Rating är skapad med id {{ param }}",
+            "updated": "En Rating är uppdaterad med id  {{ param }}",
+            "deleted": "En Rating är borttagen med id  {{ param }}",
+            "delete": {
+                "question": "Är du säker på att du vill ta bort Rating {{ id }}?"
+            },
+            "detail": {
+                "title": "Rating"
+            },
+            "value": "Value",
+            "user": "User",
+            "hipsterPoi": "Hipster Poi"
+        }
+    }
+}
