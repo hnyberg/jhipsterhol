@@ -1,0 +1,12 @@
+version: '2'
+services:
+    jhipsterhol-postgresql:
+        container_name: jhipsterhol-postgresql
+        image: postgres:9.5.1
+        # volumes:
+        #     - ~/volumes/jhipster/jhipsterhol/postgresql/:/var/lib/postgresql/
+        environment:
+            - POSTGRES_USER=jhipsterhol
+            - POSTGRES_PASSWORD=
+        ports:
+            - 5432:5432
